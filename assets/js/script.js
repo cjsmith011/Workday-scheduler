@@ -1,12 +1,13 @@
 //place all variables here
-varCurrentDayEl = document.getElementById("#currentDay");
+varCurrentDayEl = document.querySelector("#currentDay");
 
 
 
 //insert moment.js elements for current day
-var currentDay = function() {
-    varCurrentDayEl.text = moment();
-}
+// var currentDay = moment() {
+//     varCurrentDayEl.text = moment();
+//     console.log("moment");
+// }
 
 
 
