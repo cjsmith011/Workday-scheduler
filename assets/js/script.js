@@ -3,8 +3,10 @@ var CurrentDayEl = document.querySelector("#currentDay");
 var SaveButton = document.querySelector(".saveBtn")
 var taskInput = document.querySelector("#task")
 var tasks = {};
-var timeEl = document.querySelector(".hour");
+//var timeEl = document.querySelector(".hour");
 var now = moment().format("dddd, MMMM DD YYYY, h:mm a");
+var currentTime = moment().hours();
+
 
 //insert moment.js elements for current day
 var loadNow = function() {
@@ -14,35 +16,38 @@ var loadNow = function() {
 //on page load/refresh, get any tasks from local storage
 var getTasks = function() {
     var savedTasks = localStorage.getItem('tasks');
-    console.log("retrieving tasks from localStorage");
     //if nothing in local, track all tasks
     if (!tasks) {
         return false;
     }
-
-//load the found tasks
+    //load the found tasks
     savedTasks = JSON.parse(savedTasks);
     for (var i = 0; i < tasks.length; i++) {
         createTask(savedTasks[i]);
     }
     
-
 //check the task times against the current time to display them in color
-var checkTime = document.querySelector(".hour");
-    //get date from task li
-  var hour = checkTime.getAttribute("data-hour");
-  //convert the date to a moment object
-  //var hour = moment(date, "L").set("hour", 17);
+    //get date from task li and loop thru each
+     
+     $(".description").each(function () {
+       var hour = $(this).attr("data-hour");
+        //check the current hour against each task hour
+       if (currentTime > hour) {
+        $(this).addClass("past");
+         } else if 
+        (currentTime == hour) {
+        $(this).addClass("present");
+        $(this).removeClass("past");
+         } else {
+          $(this).addClass("future");
+          $(this).removeClass("past").removeClass("present");
+         }
+     })
     
-    console.log(hour);
-    
- 
-}
-
-//build the function for the local storage
+//on save, put tasks in local storage
 SaveButton.addEventListener("click", function(event) {
   event.preventDefault();
-  
+  console.log("saving to local!");
   var saveTask = {
     task: taskInput.value.trim(),
   };
@@ -50,8 +55,7 @@ SaveButton.addEventListener("click", function(event) {
   // set new submission to local storage 
   localStorage.setItem("saveTask", JSON.stringify(saveTask));
 });
-
-
+}
 
 
 loadNow();
