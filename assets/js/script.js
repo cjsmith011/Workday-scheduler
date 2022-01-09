@@ -2,7 +2,8 @@
 var CurrentDayEl = document.querySelector("#currentDay");
 var SaveButton = document.querySelector(".saveBtn")
 var taskInput = document.querySelector("#task")
-var tasks = {};
+var tasks = [];
+var taskIdCounter = 0;
 //var timeEl = document.querySelector(".hour");
 var now = moment().format("dddd, MMMM DD YYYY, h:mm a");
 var currentTime = moment().hours();
@@ -28,8 +29,7 @@ var getTasks = function() {
     
 //check the task times against the current time to display them in color
     //get date from task li and loop thru each
-     
-     $(".description").each(function () {
+      $(".description").each(function () {
        var hour = $(this).attr("data-hour");
         //check the current hour against each task hour
        if (currentTime > hour) {
@@ -42,21 +42,32 @@ var getTasks = function() {
           $(this).addClass("future");
           $(this).removeClass("past").removeClass("present");
          }
-     })
-    
+     });
+  
+  var createTask = function () {
+     taskInput.setAttribute("data-task-id", taskIdCounter);
+        console.log(taskDataObj);
+    tasks.push(taskInput);
+    saveTasks();
+    taskIdCounter++;
+      }
 //on save, put tasks in local storage
-SaveButton.addEventListener("click", function(event) {
-  event.preventDefault();
-  console.log("saving to local!");
-  var saveTask = {
-    task: taskInput.value.trim(),
-  };
+  var saveTasks = function () {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
 
-  // set new submission to local storage 
-  localStorage.setItem("saveTask", JSON.stringify(saveTask));
-});
+  SaveButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    console.log("saving to local!");
+    saveTasks();
+  });
 }
-
+    // var hour = $(this).attr("data-hour");
+    // console.log ("how many" + hour);
+    // var saveTask = {
+    //      hour: taskInput.value.trim(),
+    //  }
+    // set new submission to local storage 
 
 loadNow();
 getTasks();
